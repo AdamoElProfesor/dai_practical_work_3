@@ -34,4 +34,8 @@ public class AuthController {
             throw new BadRequestResponse(); // 400 Bad Request
         }
     }
+    public void logout(Context ctx) {
+        ctx.removeCookie("user");
+        ctx.status(HttpStatus.NO_CONTENT);
+    }
 }
