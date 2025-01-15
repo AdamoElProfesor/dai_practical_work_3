@@ -29,6 +29,7 @@ public class Main {
         app.delete("users/{id}", usersController::delete);
 
         app.post("/login", authController::login);
+        app.post("/logout", authController::logout);
 
         app.get("/cars/{id}", carsController::getOne);
 
