@@ -1,5 +1,6 @@
 package ch.heigvd.dai;
 
+import ch.heigvd.dai.auth.AuthController;
 import io.javalin.Javalin;
 import ch.heigvd.dai.users.*;
 
@@ -14,8 +15,11 @@ public class Main {
         ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
 
         UsersController usersController = new UsersController(users);
+        AuthController authController = new AuthController(users);
 
         app.post("/users", usersController::create);
+
+        app.post("/login", authController::login);
 
         app.start(PORT);
     }
