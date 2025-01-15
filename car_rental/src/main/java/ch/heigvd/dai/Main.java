@@ -26,6 +26,7 @@ public class Main {
 
 
         app.post("/users", usersController::create);
+        app.delete("users/{id}", usersController::delete);
 
         app.post("/login", authController::login);
 
