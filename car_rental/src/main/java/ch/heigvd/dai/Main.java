@@ -32,6 +32,7 @@ public class Main {
 
         app.get("/cars/{id}", carsController::getOne);
         app.put("cars/{id}/return", carsController::returnCar);
+        app.put("/cars/{id}/rent", carsController::rentCar);
 
         app.start(PORT);
     }
