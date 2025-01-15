@@ -1,5 +1,7 @@
 package ch.heigvd.dai;
 
+
+import ch.heigvd.dai.auth.AuthController;
 import ch.heigvd.dai.cars.CarsController;
 import io.javalin.Javalin;
 import ch.heigvd.dai.users.*;
@@ -19,9 +21,13 @@ public class Main {
 
 
         UsersController usersController = new UsersController(users);
+        AuthController authController = new AuthController(users);
         CarsController carsController = new CarsController(cars);
 
+
         app.post("/users", usersController::create);
+
+        app.post("/login", authController::login);
 
         app.get("/cars/{id}", carsController::getOne);
 
