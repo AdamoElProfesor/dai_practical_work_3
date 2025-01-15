@@ -22,7 +22,7 @@ public class Main {
 
         UsersController usersController = new UsersController(users);
         AuthController authController = new AuthController(users);
-        CarsController carsController = new CarsController(cars);
+        CarsController carsController = new CarsController(cars, users);
 
 
         app.post("/users", usersController::create);
@@ -31,6 +31,7 @@ public class Main {
         app.post("/login", authController::login);
 
         app.get("/cars/{id}", carsController::getOne);
+        app.put("cars/{id}/return", carsController::returnCar);
 
         app.start(PORT);
     }
