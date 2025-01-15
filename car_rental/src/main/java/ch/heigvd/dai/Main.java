@@ -16,6 +16,7 @@ public class Main {
         UsersController usersController = new UsersController(users);
 
         app.post("/users", usersController::create);
+        app.delete("users/{id}", usersController::delete);
 
         app.start(PORT);
     }

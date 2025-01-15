@@ -47,4 +47,15 @@ public class UsersController{
             throw new BadRequestResponse(); // 400 Bad Request
         }
     }
+    public void delete(Context ctx) {
+        Integer id = ctx.pathParamAsClass("id", Integer.class).get();
+
+        if (!users.containsKey(id)) {
+            throw new NotFoundResponse(); // 404 Not found
+        }
+
+        users.remove(id);
+
+        ctx.status(HttpStatus.NO_CONTENT); // 204 No Content
+    }
 }
