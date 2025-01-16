@@ -3,6 +3,8 @@ package ch.heigvd.dai.cars;
 import ch.heigvd.dai.users.User;
 import io.javalin.http.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -14,6 +16,15 @@ public class CarsController {
     public CarsController(ConcurrentHashMap<Integer, Car> cars , ConcurrentHashMap<Integer, User> users) {
         this.cars = cars;
         this.users = users;
+    }
+
+    public void getAll(Context ctx) {
+        List<Car> carsList = new ArrayList<>();
+
+        for (Car car : this.cars.values()) {
+            carsList.add(car);
+        }
+        ctx.json(cars);
     }
 
 
