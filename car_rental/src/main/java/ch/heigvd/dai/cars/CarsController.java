@@ -56,6 +56,13 @@ public class CarsController {
         car.userRenting = null;
         cars.put(carId, car);
 
+        ctx.json(new CarResponse(car.id,
+                "Car successfully returned",
+                userId,
+                car.brand,
+                car.model)
+        );
+
         ctx.status(HttpStatus.OK); // 200 OK
     }
 
@@ -85,6 +92,29 @@ public class CarsController {
         car.userRenting = userId;
         cars.put(carId, car);
 
+        ctx.json(new CarResponse(car.id,
+                "Car successfully rented",
+                userId,
+                car.brand,
+                car.model)
+        );
         ctx.status(HttpStatus.OK); // 200 OK
     }
+
+    public static class CarResponse {
+        public Integer carId;
+        public String message;
+        public Integer returnedBy;
+        public String brand;
+        public String model;
+
+        public CarResponse(Integer carId, String message, Integer returnedBy, String brand, String model) {
+            this.carId = carId;
+            this.message = message;
+            this.returnedBy = returnedBy;
+            this.brand = brand;
+            this.model = model;
+        }
+    }
+
 }
