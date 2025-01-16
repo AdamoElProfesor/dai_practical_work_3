@@ -31,6 +31,7 @@ public class Main {
         app.post("/login", authController::login);
         app.post("/logout", authController::logout);
 
+        app.get("/cars", carsController::getAll);
         app.get("/cars/{id}", carsController::getOne);
         app.put("cars/{id}/return", carsController::returnCar);
         app.put("/cars/{id}/rent", carsController::rentCar);

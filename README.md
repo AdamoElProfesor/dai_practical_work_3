@@ -5,6 +5,7 @@ The car rental API allows to manage cars and clients (users). It uses the HTTP p
 the API is based on the CRUD pattern. It has the following operations:
 
 - Create a new user
+- Get all cars
 - Get one car by its ID
 - Rent a car
 - Return a car
@@ -41,6 +42,32 @@ The response body must contain a JSON object with the following properties:
 - `201` (Created) - The user has been successfully created
 - `400` (Bad Request) - The request body is invalid
 - `409` (Conflict) - The user already exists
+
+### Get all cars 
+
+- `GET /cars/`
+
+Get all cars.
+
+#### Request 
+
+Empty
+
+#### Response
+
+The response body contains a JSON object with the following properties:
+
+- `id`
+- `brand`
+- `model`
+- `engine`
+- `power`
+- `userRenting` (contains the userId, if no one is renting, it is null)
+
+
+#### Status codes
+
+- `200` (OK) - The car has been successfully retrieved
 
 ### Get all cars 
 
