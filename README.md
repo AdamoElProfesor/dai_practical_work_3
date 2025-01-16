@@ -94,6 +94,8 @@ The response body contains a JSON object with the following properties:
 #### Status codes
 
 - `200` (OK) - The car has been successfully retrieved
+- `304` (Not modified) - The cars are still the same
+
 
 ### Get one car 
 
@@ -120,6 +122,7 @@ The response body contains a JSON object with the following properties:
 #### Status codes
 
 - `200` (OK) - The car has been successfully retrieved
+- `304` (Not modified) - The car is still the same
 - `404` (Not Found) - The car does not exist
 
 ### Rent a car
@@ -149,6 +152,7 @@ The `userRenting` field is updated
 - `401` (Unauthorized) - User has not logged in
 - `404` (Not Found) - The car does not exist
 - `409` (Conflict) - The is already rented
+- `412` (Precondition Failed)
 
 
 ### Return a car
@@ -178,6 +182,7 @@ The `userRenting` field is updated
 - `401` (Unauthorized) - User has not logged in
 - `403` (Forbidden) - The user is not renting the car
 - `404` (Not Found) - The car does not exist
+- `412` (Precondition Failed)
 
 ### Delete a user
 
