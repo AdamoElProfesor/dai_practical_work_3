@@ -42,6 +42,31 @@ The response body must contain a JSON object with the following properties:
 - `400` (Bad Request) - The request body is invalid
 - `409` (Conflict) - The user already exists
 
+### Get all cars 
+
+- `GET /cars/`
+
+Get all cars.
+
+#### Request 
+
+Empty
+
+#### Response
+
+The response body contains a JSON object with the following properties:
+
+- `id`
+- `brand`
+- `model`
+- `engine`
+- `power`
+- `userRenting` (contains the userId, if no one is renting, it is null)
+
+
+#### Status codes
+
+- `200` (OK) - The car has been successfully retrieved
 
 ### Get one car 
 
@@ -82,7 +107,14 @@ The request path must contain the ID of the car.
 
 #### Response
 
-The response body is empty. The `userRenting` field is updated
+The response body contains a JSON object with the following properties:
+- `id`
+- `message`
+- `userRenting`
+- `brand`
+- `model`
+
+The `userRenting` field is updated
 
 #### Status codes
 
@@ -104,7 +136,14 @@ The request path must contain the ID of the car.
 
 #### Response
 
-The response body is empty. The `userRenting` field is updated
+The response body contains a JSON object with the following properties:
+- `id`
+- `message`
+- `userRenting`
+- `brand`
+- `model`
+
+The `userRenting` field is updated
 
 #### Status codes
 
