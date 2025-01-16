@@ -24,6 +24,8 @@ public class CarsController {
         for (Car car : this.cars.values()) {
             carsList.add(car);
         }
+
+        ctx.status(HttpStatus.OK); // 200 OK
         ctx.json(cars);
     }
 
