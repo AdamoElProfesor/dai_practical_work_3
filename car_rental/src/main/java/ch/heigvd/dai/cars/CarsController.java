@@ -58,7 +58,7 @@ public class CarsController {
 
         ctx.json(new CarResponse(car.id,
                 "Car successfully returned",
-                userId,
+                null,
                 car.brand,
                 car.model)
         );
@@ -102,16 +102,16 @@ public class CarsController {
     }
 
     public static class CarResponse {
-        public Integer carId;
+        public Integer id;
         public String message;
-        public Integer returnedBy;
+        public Integer userRenting;
         public String brand;
         public String model;
 
-        public CarResponse(Integer carId, String message, Integer returnedBy, String brand, String model) {
-            this.carId = carId;
+        public CarResponse(Integer carId, String message, Integer userRenting, String brand, String model) {
+            this.id = carId;
             this.message = message;
-            this.returnedBy = returnedBy;
+            this.userRenting = userRenting;
             this.brand = brand;
             this.model = model;
         }
