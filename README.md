@@ -5,6 +5,7 @@ The car rental API allows to manage cars and clients (users). It uses the HTTP p
 the API is based on the CRUD pattern. It has the following operations:
 
 - Create a new user
+- Delete a user by its ID
 - Get all cars
 - Get one car by its ID
 - Rent a car
@@ -42,6 +43,26 @@ The response body must contain a JSON object with the following properties:
 - `201` (Created) - The user has been successfully created
 - `400` (Bad Request) - The request body is invalid
 - `409` (Conflict) - The user already exists
+
+## Delete a user
+
+- `DELETE /users/{id}`
+
+Delete a user by its ID.
+
+#### Request
+
+The request path must contain the ID of the user.
+
+#### Response
+
+The response body is empty.
+
+#### Status codes
+
+- `204` (No Content) - The user has been successfully deleted
+- `404` (Not Found) - The user does not exist
+
 
 ### Get all cars 
 
