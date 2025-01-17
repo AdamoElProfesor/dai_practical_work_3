@@ -7,22 +7,26 @@ import io.javalin.Javalin;
 import ch.heigvd.dai.users.*;
 import ch.heigvd.dai.cars.*;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
     public static final int PORT = 8080;
 
     public static void main(String[] args) {
-        Javalin app = Javalin.create();
+        Javalin app =
+                Javalin.create(config -> config.validation.register(LocalDateTime.class, LocalDateTime::parse));
 
         ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
         ConcurrentHashMap<Integer, Car> cars = new ConcurrentHashMap<>();
-        fillCars(cars);
+        ConcurrentHashMap<Integer, LocalDateTime> carsCache = new ConcurrentHashMap<>();
+        fillCars(cars, carsCache);
+
 
 
         UsersController usersController = new UsersController(users);
         AuthController authController = new AuthController(users);
-        CarsController carsController = new CarsController(cars, users);
+        CarsController carsController = new CarsController(cars, users, carsCache);
 
 
         app.post("/users", usersController::create);
@@ -39,7 +43,7 @@ public class Main {
         app.start(PORT);
     }
 
-    public static void fillCars(ConcurrentHashMap<Integer, Car> cars){
+    public static void fillCars(ConcurrentHashMap<Integer, Car> cars, ConcurrentHashMap<Integer, LocalDateTime> carsCache){
         cars.put(1, new Car() {{
             id = 1;
             brand = "Toyota";
@@ -48,6 +52,7 @@ public class Main {
             power = 120;
             userRenting = null;
         }});
+        carsCache.put(1, LocalDateTime.now());
 
         cars.put(2, new Car() {{
             id = 2;
@@ -58,6 +63,9 @@ public class Main {
             userRenting = null;
         }});
 
+        carsCache.put(2, LocalDateTime.now());
+
+
         cars.put(3, new Car() {{
             id = 3;
             brand = "Ford";
@@ -66,6 +74,9 @@ public class Main {
             power = 150;
             userRenting = null;
         }});
+
+        carsCache.put(3, LocalDateTime.now());
+
 
         cars.put(4, new Car() {{
             id = 4;
@@ -76,6 +87,9 @@ public class Main {
             userRenting = null;
         }});
 
+        carsCache.put(4, LocalDateTime.now());
+
+
         cars.put(5, new Car() {{
             id = 5;
             brand = "Mercedes-Benz";
@@ -84,6 +98,9 @@ public class Main {
             power = 241;
             userRenting = null;
         }});
+
+        carsCache.put(5, LocalDateTime.now());
+
 
         cars.put(6, new Car() {{
             id = 6;
@@ -94,6 +111,9 @@ public class Main {
             userRenting = null;
         }});
 
+        carsCache.put(6, LocalDateTime.now());
+
+
         cars.put(7, new Car() {{
             id = 7;
             brand = "Audi";
@@ -102,6 +122,9 @@ public class Main {
             power = 201;
             userRenting = null;
         }});
+
+        carsCache.put(7, LocalDateTime.now());
+
 
         cars.put(8, new Car() {{
             id = 8;
@@ -112,6 +135,9 @@ public class Main {
             userRenting = null;
         }});
 
+        carsCache.put(8, LocalDateTime.now());
+
+
         cars.put(9, new Car() {{
             id = 9;
             brand = "Tesla";
@@ -121,6 +147,9 @@ public class Main {
             userRenting = null;
         }});
 
+        carsCache.put(9, LocalDateTime.now());
+
+
         cars.put(10, new Car() {{
             id = 10;
             brand = "Chevrolet";
@@ -129,5 +158,8 @@ public class Main {
             power = 160;
             userRenting = null;
         }});
+
+        carsCache.put(10, LocalDateTime.now());
+
     }
 }
