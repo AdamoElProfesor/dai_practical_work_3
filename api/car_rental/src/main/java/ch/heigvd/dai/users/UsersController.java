@@ -41,7 +41,7 @@ public class UsersController{
             users.put(user.id, user);
 
             ctx.status(HttpStatus.CREATED);  // 201 Created
-            ctx.json(user);
+            ctx.json(new UserResponse(user));
 
         }catch (ValidationException e) {
             throw new BadRequestResponse(); // 400 Bad Request
@@ -57,5 +57,16 @@ public class UsersController{
         users.remove(id);
 
         ctx.status(HttpStatus.NO_CONTENT); // 204 No Content
+    }
+    public class UserResponse{
+        public Integer id;
+        public String firstName;
+        public String lastName;
+
+        public UserResponse(User user){
+            this.id = user.id;
+            this.firstName = user.firstName;
+            this.lastName = user.lastName;
+        }
     }
 }
