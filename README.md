@@ -379,10 +379,10 @@ Docker images must be correctly tagged to upload them to GitHub Container Regist
 ghcr.io/<username>/<image>:<tag>
 ```
 
-For example, to tag the image `java-ios-docker` for your username, run:
+For example, to tag the image `car-rental-docker` for your username, run:
 
 ```
-docker tag java-ios-docker ghcr.io/<username>/java-ios-docker:latest
+docker tag car-rental-docker ghcr.io/<username>/car-rental-docker:latest
 ```
 
 **Verify the Tagging:** List all Docker images to confirm the tagging:
@@ -395,14 +395,14 @@ docker images
 
 ```
 REPOSITORY                           TAG       IMAGE ID       CREATED         SIZE
-java-ios-docker                      latest    8214c1a1c97c   3 minutes ago   282MB
-ghcr.io/<username>/java-ios-docker   latest    8214c1a1c97c   3 minutes ago   282MB
+car-rental-docker                    latest    8214c1a1c97c   3 minutes ago   282MB
+ghcr.io/<username>/car-rental-docker latest    8214c1a1c97c   3 minutes ago   282MB
 ```
 
-You can optionally remove the local `java-ios-docker` image:
+You can optionally remove the local `car-rental-docker` image:
 
 ```
-docker rmi java-ios-docker
+docker rmi car-rental-docker
 ```
 
 * * * * *
@@ -412,13 +412,13 @@ docker rmi java-ios-docker
 Publish the image to GitHub Container Registry:
 
 ```
-docker push ghcr.io/<username>/java-ios-docker
+docker push ghcr.io/<username>/car-rental-docker
 ```
 
 **Expected Output:**
 
 ```
-The push refers to repository [ghcr.io/<username>/java-ios-docker]
+The push refers to repository [ghcr.io/<username>/car-rental-docker]
 130abe5d3a5e: Pushed
 ...
 latest: digest: sha256:d0d83a97c4522ddbeb8968e9d509fdebecf0450ca1651c13c14ca774f01e8675 size: 1784
@@ -443,7 +443,7 @@ The image is private by default. You can change its visibility in the image sett
 You have successfully published your Docker image to GitHub Container Registry. To pull the image, use:
 
 ```
-docker pull ghcr.io/<username>/java-ios-docker:latest
+docker pull ghcr.io/<username>/car-rental-docker:latest
 ```
 
 * * * * *
@@ -456,16 +456,16 @@ Run Your Applications with Docker and Docker Compose
 Pull the image using the following command, replacing `<username>` with your GitHub username:
 
 ```
-docker pull ghcr.io/<username>/java-ios-docker
+docker pull ghcr.io/<username>/car-rental-docker
 ```
 
 **Sample Output:**
 
 ```
 Using default tag: latest
-latest: Pulling from <username>/java-ios-docker
+latest: Pulling from <username>/car-rental-docker
 ...
-Status: Downloaded newer image for ghcr.io/<username>/java-ios-docker:latest
+Status: Downloaded newer image for ghcr.io/<username>/car-rental-docker:latest
 ```
 
 * * * * *
@@ -474,50 +474,12 @@ Status: Downloaded newer image for ghcr.io/<username>/java-ios-docker:latest
 
 Run the image with the following commands, replacing `<username>` with your GitHub username:
 
-#### Write a 100-byte File:
-
 ```
-docker run --rm -v "$(pwd):/data" ghcr.io/<username>/java-ios-docker\
-  --implementation BUFFERED_BINARY\
-  /data/100-bytes.bin\
-  write\
-  --size 100
-```
-
-#### Read the 100-byte File:
-
-```
-docker run --rm -v "$(pwd):/data" ghcr.io/<username>/java-ios-docker\
-  --implementation BUFFERED_BINARY\
-  /data/100-bytes.bin\
-  read
+docker run --rm -v "$(pwd):/data" ghcr.io/<username>/car-rental-docker\
 ```
 
 The results will match those obtained when running the image locally, but now the image is pulled from GitHub Container Registry.
 
-* * * * *
-
-### 3\. Run the Image with Docker Compose
-
-Create a Docker Compose file to manage the image. The file will define two services:
-
-1.  `**writer**`: Writes a `100-bytes.bin` file to the `/data` volume.
-
-2.  `**reader**`: Reads the `100-bytes.bin` file from the `/data` volume.
-
-Take your time to create the Docker Compose file, understanding each instruction and its purpose. Once ready, run the following commands:
-
-#### Write the File:
-
-```
-docker compose up writer
-```
-
-#### Read the File:
-
-```
-docker compose up reader
-```
 
 * * * * *
 
