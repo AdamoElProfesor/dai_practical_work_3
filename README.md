@@ -1,266 +1,110 @@
-# Car rental API
+Car Rental API - Docker Compose Guide
+=====================================
 
-The car rental API allows to manage cars and clients (users). It uses the HTTP protocol and the JSON format
+Prerequisites
+-------------
 
-the API is based on the CRUD pattern. It has the following operations:
+1.  **Docker**: Make sure Docker is installed on your machine.
 
-- Create a new user
-- Delete a user by its ID
-- Get all cars
-- Get one car by its ID
-- Rent a car
-- Return a car
-- Delete a user by its ID
-- Login
-- Logout
+    -   Install Docker
 
-## Endpoints
+2.  **Docker Compose**: Ensure Docker Compose is installed.
 
-### Create a new user
+    -   Install Docker Compose
 
-- `POST /users`
+3.  Clone the repository:
 
-Create a new user.
-#### Request
+    ```
+    git clone https://github.com/AdamoElProfesor/dai_practical_work_3.git
+    cd dai_practical_work_3
+    ```
 
-The request body must contain a JSON object with the following properties:
+4. **Maven Wrapper**: Use the Maven Wrapper to build the application.
 
-- `firstName`
-- `lastName`
-- `email`
-- `password`
+    -   If you haven't already, ensure the Maven Wrapper is included in the repository.
 
-### Response
+    -   Build the application JAR file:
 
-The response body must contain a JSON object with the following properties:
+    ```
+    cd ./api/car_rental
+    ./mvnw clean package
+    ```
 
-- `id`
-- `firstName`
-- `lastName`
+    For Windows:
 
-#### Status codes
+    ```
+   cd ./api/car_rental
+    mvnw.cmd clean package
+    ```
 
-- `201` (Created) - The user has been successfully created
-- `400` (Bad Request) - The request body is invalid
-- `409` (Conflict) - The user already exists
+* * * * *
 
-## Delete a user
+* * * * *
 
-- `DELETE /users/{id}`
+Using Docker Compose
+--------------------
 
-Delete a user by its ID.
+### 1\. Update the `.env` File in /api
 
-#### Request
+Before running the application, update the `.env` file in the **API directory** to include your domain name:
 
-The request path must contain the ID of the user.
+```
+TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME=your-domain.duckdns.org
+```
 
-#### Response
+* * * * *
 
-The response body is empty.
+### 2\. Start Traefik First
 
-#### Status codes
+Run the following command to start the Traefik service:
 
-- `204` (No Content) - The user has been successfully deleted
-- `404` (Not Found) - The user does not exist
+```
+cd ./traefik
+docker-compose up --build traefik
+```
 
+-   This ensures that the reverse proxy is running and ready to route traffic to your API.
 
-### Get all cars 
+* * * * *
 
-- `GET /cars/`
+### 3\. Start the API
 
-Get all cars.
+Once Traefik is up, start the API service:
 
-#### Request 
+```
+cd ./traefik
+docker-compose up --build api
+```
 
-Empty
+* * * * *
 
-#### Response
+### 4\. Access the Application
 
-The response body contains a JSON object with the following properties:
+-   **API Endpoint**: The API will be available at:
 
-- `id`
-- `brand`
-- `model`
-- `engine`
-- `power`
-- `userRenting` (contains the userId, if no one is renting, it is null)
+    -   `http://your-domain.duckdns.org/cars` (if Traefik is configured correctly).
 
+* * * * *
 
-#### Status codes
+### 5\. Stop the Application
 
-- `200` (OK) - The car has been successfully retrieved
+To stop the application and remove containers:
 
-### Get all cars 
+```
+docker-compose down
+```
 
-- `GET /cars/`
+* * * * *
 
-Get all cars.
+### Troubleshooting
 
-#### Request 
+-   Ensure the `.env` file is correctly updated with your domain.
 
-Empty
+-   Start Traefik before the API to allow proper routing.
 
-#### Response
+-   Check the logs if something doesn't work:
 
-The response body contains a JSON object with the following properties:
-
-- `id`
-- `brand`
-- `model`
-- `engine`
-- `power`
-- `userRenting` (contains the userId, if no one is renting, it is null)
-
-
-#### Status codes
-
-- `200` (OK) - The car has been successfully retrieved
-- `304` (Not modified) - The cars are still the same
-
-
-### Get one car 
-
-- `GET /cars/{carId}`
-
-Get one car by its ID.
-
-#### Request 
-
-The request path must contain the ID of the car.
-
-#### Response
-
-The response body contains a JSON object with the following properties:
-
-- `id`
-- `brand`
-- `model`
-- `engine`
-- `power`
-- `userRenting` (contains the userId, if no one is renting, it is null)
-
-
-#### Status codes
-
-- `200` (OK) - The car has been successfully retrieved
-- `304` (Not modified) - The car is still the same
-- `404` (Not Found) - The car does not exist
-
-### Rent a car
-
-- `PUT /cars/{carId}/rent`
-
-User rents a car 
-
-#### Request
-
-The request path must contain the ID of the car.
-
-#### Response
-
-The response body contains a JSON object with the following properties:
-- `id`
-- `message`
-- `userRenting`
-- `brand`
-- `model`
-
-The `userRenting` field is updated
-
-#### Status codes
-
-- `200` (OK) - The car has been successfully updated
-- `401` (Unauthorized) - User has not logged in
-- `404` (Not Found) - The car does not exist
-- `409` (Conflict) - The is already rented
-- `412` (Precondition Failed)
-
-
-### Return a car
-
-- `PUT /cars/{carId}/return`
-
-User returns a car
-
-#### Request
-
-The request path must contain the ID of the car.
-
-#### Response
-
-The response body contains a JSON object with the following properties:
-- `id`
-- `message`
-- `userRenting`
-- `brand`
-- `model`
-
-The `userRenting` field is updated
-
-#### Status codes
-
-- `200` (OK) - The car has been successfully updated
-- `401` (Unauthorized) - User has not logged in
-- `403` (Forbidden) - The user is not renting the car
-- `404` (Not Found) - The car does not exist
-- `412` (Precondition Failed)
-
-### Delete a user
-
-- `DELETE /users/{id}`
-
-Delete a user by its ID.
-
-#### Request
-
-The request path must contain the ID of the user.
-
-#### Response
-
-The response body is empty.
-
-#### Status codes
-
-- `204` (No Content) - The user has been successfully deleted
-- `404` (Not Found) - The user does not exist
-
-### Login
-
-- `POST /login`
-
-Login a user.
-
-#### Request
-
-The request body must contain a JSON object with the following properties:
-
-- `email`
-- `password`
-
-#### Response
-
-The response body is empty. A `user` cookie is set with the ID of the user.
-
-#### Status codes
-
-- `204` (No Content) - The user has been successfully logged in
-- `400` (Bad Request) - The request body is invalid
-- `401` (Unauthorized) - The user does not exist or the password is incorrect
-
-### Logout
-
-- `POST /logout`
-
-Logout a user.
-
-#### Request
-
-The request body is empty.
-
-#### Response
-
-The response body is empty. The `user` cookie is removed.
-
-#### Status codes
-
-- `204` (No Content) - The user has been successfully logged out
+    ```
+    docker-compose logs traefik
+    docker-compose logs api
+    ```
