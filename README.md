@@ -1,266 +1,177 @@
-# Car rental API
+Setting Up a Virtual Machine on Microsoft Azure
+===============================================
 
-The car rental API allows to manage cars and clients (users). It uses the HTTP protocol and the JSON format
+This guide will walk you through setting up a virtual machine on Microsoft Azure. Follow the steps below to acquire and configure your VM for use.
 
-the API is based on the CRUD pattern. It has the following operations:
+* * * * *
 
-- Create a new user
-- Delete a user by its ID
-- Get all cars
-- Get one car by its ID
-- Rent a car
-- Return a car
-- Delete a user by its ID
-- Login
-- Logout
+Prerequisites
+-------------
 
-## Endpoints
+1.  **Azure for Students Account**: Use your HES-SO email address to apply for free Azure credits.
 
-### Create a new user
+2.  **SSH Key Pair**: Ensure you have an SSH key pair ready for authentication. You can use your existing key or generate a new one with `ssh-keygen`.
 
-- `POST /users`
+* * * * *
 
-Create a new user.
-#### Request
+Step 1: Access Microsoft Azure
+------------------------------
 
-The request body must contain a JSON object with the following properties:
+1.  Log in to the Azure portal at <https://portal.azure.com> using your HES-SO email address (`<first name>.<last name>@hes-so.ch`).
 
-- `firstName`
-- `lastName`
-- `email`
-- `password`
+2.  Use the password associated with your HES-SO account (e.g., GAPS, Cyberlearn credentials).
 
-### Response
+* * * * *
 
-The response body must contain a JSON object with the following properties:
+Step 2: Apply for the Azure for Students Offer
+----------------------------------------------
 
-- `id`
-- `firstName`
-- `lastName`
+1.  Navigate to [Azure for Students](https://azure.microsoft.com/en-us/free/students/).
 
-#### Status codes
+2.  Log in with your HES-SO email if prompted.
 
-- `201` (Created) - The user has been successfully created
-- `400` (Bad Request) - The request body is invalid
-- `409` (Conflict) - The user already exists
+3.  Complete the form with your details to activate free credits.
 
-## Delete a user
+* * * * *
 
-- `DELETE /users/{id}`
+Step 3: Create a Virtual Machine
+--------------------------------
 
-Delete a user by its ID.
+1.  Log in to the Azure portal.
 
-#### Request
+2.  From the dashboard, select **Create a resource** > **Virtual Machine**.
 
-The request path must contain the ID of the user.
+3.  Configure the virtual machine with the following settings:
 
-#### Response
+### **Project Details**
 
-The response body is empty.
+-   **Subscription**: Azure for Students
 
-#### Status codes
+-   **Resource Group**: Create a new group named `heig-vd-dai-course`
 
-- `204` (No Content) - The user has been successfully deleted
-- `404` (Not Found) - The user does not exist
+### **Instance Details**
 
+-   **Name**: `heig-vd-dai-course-vm`
 
-### Get all cars 
+-   **Region**: (Europe) West Europe
 
-- `GET /cars/`
+-   **Availability Options**: No infrastructure redundancy required
 
-Get all cars.
+-   **Security Type**: Trusted launch virtual machines
 
-#### Request 
+-   **Image**: Ubuntu Server 24.04 LTS - x64 Gen2
 
-Empty
+-   **Size**: Standard_B1s (click "See all sizes" if needed)
 
-#### Response
+### **Administrator Account**
 
-The response body contains a JSON object with the following properties:
+-   **Authentication Type**: SSH Public Key
 
-- `id`
-- `brand`
-- `model`
-- `engine`
-- `power`
-- `userRenting` (contains the userId, if no one is renting, it is null)
+-   **Username**: `ubuntu`
 
+-   **SSH Public Key Source**: Use existing public key
 
-#### Status codes
+-   **SSH Public Key**: Paste your public key
 
-- `200` (OK) - The car has been successfully retrieved
+### **Inbound Port Rules**
 
-### Get all cars 
+-   **Public Inbound Ports**: Allow selected ports
 
-- `GET /cars/`
+-   **Selected Ports**: HTTP (80), HTTPS (443), SSH (22)
 
-Get all cars.
+1.  Click **Review + Create**, then **Create** to deploy the virtual machine.
 
-#### Request 
+2.  Wait for the deployment to complete and click **Go to resource**.
 
-Empty
+3.  Note the public IP address of the virtual machine for SSH access.
 
-#### Response
+* * * * *
 
-The response body contains a JSON object with the following properties:
+Step 4: Access the Virtual Machine with SSH
+-------------------------------------------
 
-- `id`
-- `brand`
-- `model`
-- `engine`
-- `power`
-- `userRenting` (contains the userId, if no one is renting, it is null)
+1.  Use the public IP address of the VM to connect:
 
+    ```
+    ssh ubuntu@<vm_public_ip>
+    ```
 
-#### Status codes
+2.  Confirm the fingerprint when prompted:
 
-- `200` (OK) - The car has been successfully retrieved
-- `304` (Not modified) - The cars are still the same
+    ```
+    The authenticity of host '<vm_public_ip>' can't be established.
+    Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+    ```
 
+3.  To validate the fingerprint, you can:
 
-### Get one car 
+    ```
+    find /etc/ssh -name '*.pub' -exec ssh-keygen -l -f {} \;
+    ```
 
-- `GET /cars/{carId}`
+    Alternatively, use the Azure CLI:
 
-Get one car by its ID.
+    ```
+    az vm run-command invoke\
+      --resource-group <resource_group>\
+      --name <vm_name>\
+      --command-id RunShellScript\
+      --scripts "find /etc/ssh -name '*.pub' -exec ssh-keygen -l -f {} \;"
+    ```
 
-#### Request 
+* * * * *
 
-The request path must contain the ID of the car.
+Step 5: Update and Secure the Virtual Machine
+---------------------------------------------
 
-#### Response
+1.  Update packages:
 
-The response body contains a JSON object with the following properties:
+    ```
+    sudo apt update
+    sudo apt upgrade
+    ```
 
-- `id`
-- `brand`
-- `model`
-- `engine`
-- `power`
-- `userRenting` (contains the userId, if no one is renting, it is null)
+2.  Reboot the VM:
 
+    ```
+    sudo reboot
+    ```
 
-#### Status codes
+**Security Measures:**
 
-- `200` (OK) - The car has been successfully retrieved
-- `304` (Not modified) - The car is still the same
-- `404` (Not Found) - The car does not exist
+-   SSH access is restricted to your key pair.
 
-### Rent a car
+-   Only essential ports (22, 80, 443) are open.
 
-- `PUT /cars/{carId}/rent`
+-   Packages are kept up to date.
 
-User rents a car 
+For advanced security, refer to [How to Secure a Linux Server](https://github.com/imthenachoman/How-To-Secure-A-Linux-Server).
 
-#### Request
+* * * * *
 
-The request path must contain the ID of the car.
+Step 6: Install Docker and Docker Compose
+-----------------------------------------
 
-#### Response
+1.  Install Docker and Docker Compose by following this guide.
 
-The response body contains a JSON object with the following properties:
-- `id`
-- `message`
-- `userRenting`
-- `brand`
-- `model`
+2.  Verify the installation:
 
-The `userRenting` field is updated
+    ```
+    docker --version
+    docker-compose --version
+    ```
 
-#### Status codes
+* * * * *
 
-- `200` (OK) - The car has been successfully updated
-- `401` (Unauthorized) - User has not logged in
-- `404` (Not Found) - The car does not exist
-- `409` (Conflict) - The is already rented
-- `412` (Precondition Failed)
+Congratulations!
+----------------
 
+Your virtual machine is now set up and ready for use. You have:
 
-### Return a car
+-   Acquired a virtual machine with Azure for Students credits.
 
-- `PUT /cars/{carId}/return`
+-   Configured SSH access and updated the system.
 
-User returns a car
+-   Installed Docker and Docker Compose for further development.
 
-#### Request
-
-The request path must contain the ID of the car.
-
-#### Response
-
-The response body contains a JSON object with the following properties:
-- `id`
-- `message`
-- `userRenting`
-- `brand`
-- `model`
-
-The `userRenting` field is updated
-
-#### Status codes
-
-- `200` (OK) - The car has been successfully updated
-- `401` (Unauthorized) - User has not logged in
-- `403` (Forbidden) - The user is not renting the car
-- `404` (Not Found) - The car does not exist
-- `412` (Precondition Failed)
-
-### Delete a user
-
-- `DELETE /users/{id}`
-
-Delete a user by its ID.
-
-#### Request
-
-The request path must contain the ID of the user.
-
-#### Response
-
-The response body is empty.
-
-#### Status codes
-
-- `204` (No Content) - The user has been successfully deleted
-- `404` (Not Found) - The user does not exist
-
-### Login
-
-- `POST /login`
-
-Login a user.
-
-#### Request
-
-The request body must contain a JSON object with the following properties:
-
-- `email`
-- `password`
-
-#### Response
-
-The response body is empty. A `user` cookie is set with the ID of the user.
-
-#### Status codes
-
-- `204` (No Content) - The user has been successfully logged in
-- `400` (Bad Request) - The request body is invalid
-- `401` (Unauthorized) - The user does not exist or the password is incorrect
-
-### Logout
-
-- `POST /logout`
-
-Logout a user.
-
-#### Request
-
-The request body is empty.
-
-#### Response
-
-The response body is empty. The `user` cookie is removed.
-
-#### Status codes
-
-- `204` (No Content) - The user has been successfully logged out
+Continue with the course materials to deploy applications on your VM.
