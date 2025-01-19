@@ -1,0 +1,18 @@
+services:
+  api:
+    build:
+      context: . # Path to the Dockerfile
+    container_name: my-api
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik_network
+      - traefik.http.routers.traefik.rule=Host(`api.localhost`) # Match the hostname
+      - traefik.http.routers.api.entrypoints=https         # Use HTTPS for routing
+      - traefik.http.services.api.loadbalancer.server.port=8080 # Forward to the container's internal port 8080
+    networks:
+      - traefik_network
+
+networks:
+  traefik_network:
+    external: true
+
