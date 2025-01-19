@@ -1,0 +1,11 @@
+http:
+  middlewares:
+    redis-cache:
+      plugin:
+        redis-cache:
+          redisAddress: "redis:6379"
+          defaultTTL: 300  # Store responses for 300 seconds
+          code:
+            - 200         # Cache responses with HTTP status 200
+            - 304         # Also cache validation responses
+          respectHeaders: false  # Ignore headers like Cache-Control for testing

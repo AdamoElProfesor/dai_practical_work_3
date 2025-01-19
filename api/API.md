@@ -64,13 +64,13 @@ The response body is empty.
 - `404` (Not Found) - The user does not exist
 
 
-### Get all cars
+### Get all cars 
 
 - `GET /cars/`
 
 Get all cars.
 
-#### Request
+#### Request 
 
 Empty
 
@@ -90,13 +90,13 @@ The response body contains a JSON object with the following properties:
 
 - `200` (OK) - The car has been successfully retrieved
 
-### Get all cars
+### Get all cars 
 
 - `GET /cars/`
 
 Get all cars.
 
-#### Request
+#### Request 
 
 Empty
 
@@ -118,13 +118,13 @@ The response body contains a JSON object with the following properties:
 - `304` (Not modified) - The cars are still the same
 
 
-### Get one car
+### Get one car 
 
 - `GET /cars/{carId}`
 
 Get one car by its ID.
 
-#### Request
+#### Request 
 
 The request path must contain the ID of the car.
 
@@ -150,7 +150,7 @@ The response body contains a JSON object with the following properties:
 
 - `PUT /cars/{carId}/rent`
 
-User rents a car
+User rents a car 
 
 #### Request
 
