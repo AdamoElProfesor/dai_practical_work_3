@@ -9,6 +9,8 @@ services:
       - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME}`)
       - traefik.http.routers.api.entrypoints=https         # Use HTTPS for routing
       - traefik.http.services.api.loadbalancer.server.port=8080 # Forward to the container's internal port 8080
+      - traefik.http.routers.traefik.service=api@internal # Dashboard
+
     networks:
       - traefik_network
 
