@@ -20,11 +20,12 @@ The API is designed for developers to integrate into projects or simulate car re
 
 ## Summary
 
-| Section                                                                         | Description                                                                       |
-|---------------------------------------------------------------------------------| --------------------------------------------------------------------------------- |
-| [Run the Application](#run-the-application)                                     | Instructions to set up and run the Car Rental API using Docker Compose.           |
-| [Azure Virtual Machine Setup](#setting-up-a-virtual-machine-on-microsoft-azure) | Guide to setting up a virtual machine on Microsoft Azure.                         |
+| Section                                                                         | Description                                                                     |
+|---------------------------------------------------------------------------------| ------------------------------------------------------------------------------- |
+| [Run the Application](#run-the-application)                                     | Instructions to set up and run the Car Rental API using Docker Compose.         |
+| [Azure Virtual Machine Setup](#setting-up-a-virtual-machine-on-microsoft-azure) | Guide to setting up a virtual machine on Microsoft Azure.                       |
 | [API Documentation](api/API.md)                                                 | Complete API details including endpoints, request/response formats, and examples. |
+| [Publish docker image](#publish-your-applications-with-docker)                  | Publish and Run Your Docker Applications with GitHub Container Registry|
 
 
 Run the Application
@@ -320,3 +321,168 @@ Your virtual machine is now set up and ready for use. You have:
 -   Installed Docker and Docker Compose for further development.
 
 Continue with the course materials to deploy applications on your VM.
+
+
+Publish and Run Your Docker Applications with GitHub Container Registry
+=======================================================================
+
+This guide explains how to publish your Docker images to GitHub Container Registry and how to use them with Docker and Docker Compose.
+
+* * * * *
+
+Publish Your Applications with Docker
+-------------------------------------
+
+### Why Use GitHub Container Registry?
+
+Publishing Docker images to GitHub Container Registry allows you to share your images with others securely. Follow these steps to publish your own images.
+
+* * * * *
+
+### 1\. Create a Personal Access Token
+
+To authenticate with GitHub Container Registry, you need a Personal Access Token (PAT):
+
+1.  Go to your GitHub account settings:
+
+    -   Navigate to **Settings** > **Developer settings** > **Personal access tokens** > **Tokens (classic)**.
+
+2.  Generate a new token with the required permissions by following [GitHub's official guide](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+
+3.  Copy and save the token securely. You will use it instead of your GitHub password for authentication.
+
+* * * * *
+
+### 2\. Log In to GitHub Container Registry
+
+Authenticate with GitHub Container Registry by running the following command, replacing `<username>` with your GitHub username:
+
+```
+docker login ghcr.io -u <username>
+```
+
+When prompted for a password, paste the Personal Access Token you created earlier.
+
+**Expected Output:**
+
+```
+Login Succeeded
+```
+
+* * * * *
+
+### 3\. Tag Your Docker Image
+
+Docker images must be correctly tagged to upload them to GitHub Container Registry. Use the following format:
+
+```
+ghcr.io/<username>/<image>:<tag>
+```
+
+For example, to tag the image `car-rental-docker` for your username, run:
+
+```
+docker tag car-rental-docker ghcr.io/<username>/car-rental-docker:latest
+```
+
+**Verify the Tagging:** List all Docker images to confirm the tagging:
+
+```
+docker images
+```
+
+**Sample Output:**
+
+```
+REPOSITORY                           TAG       IMAGE ID       CREATED         SIZE
+car-rental-docker                    latest    8214c1a1c97c   3 minutes ago   282MB
+ghcr.io/<username>/car-rental-docker latest    8214c1a1c97c   3 minutes ago   282MB
+```
+
+You can optionally remove the local `car-rental-docker` image:
+
+```
+docker rmi car-rental-docker
+```
+
+* * * * *
+
+### 4\. Push the Image to GitHub Container Registry
+
+Publish the image to GitHub Container Registry:
+
+```
+docker push ghcr.io/<username>/car-rental-docker
+```
+
+**Expected Output:**
+
+```
+The push refers to repository [ghcr.io/<username>/car-rental-docker]
+130abe5d3a5e: Pushed
+...
+latest: digest: sha256:d0d83a97c4522ddbeb8968e9d509fdebecf0450ca1651c13c14ca774f01e8675 size: 1784
+```
+
+* * * * *
+
+### 5\. Verify the Published Image
+
+Go to the GitHub Container Registry page to confirm the image has been successfully uploaded. Replace `<username>` with your GitHub username:
+
+```
+https://github.com/<username>?tab=packages
+```
+
+The image is private by default. You can change its visibility in the image settings if needed.
+
+* * * * *
+
+### Congratulations!
+
+You have successfully published your Docker image to GitHub Container Registry. To pull the image, use:
+
+```
+docker pull ghcr.io/<username>/car-rental-docker:latest
+```
+
+* * * * *
+
+Run Your Applications with Docker and Docker Compose
+----------------------------------------------------
+
+### 1\. Pull the Image from GitHub Container Registry
+
+Pull the image using the following command, replacing `<username>` with your GitHub username:
+
+```
+docker pull ghcr.io/<username>/car-rental-docker
+```
+
+**Sample Output:**
+
+```
+Using default tag: latest
+latest: Pulling from <username>/car-rental-docker
+...
+Status: Downloaded newer image for ghcr.io/<username>/car-rental-docker:latest
+```
+
+* * * * *
+
+### 2\. Run the Image with Docker
+
+Run the image with the following commands, replacing `<username>` with your GitHub username:
+
+```
+docker run --rm -v "$(pwd):/data" ghcr.io/<username>/car-rental-docker\
+```
+
+The results will match those obtained when running the image locally, but now the image is pulled from GitHub Container Registry.
+
+
+* * * * *
+
+### Congratulations!
+
+You have successfully published, pulled, and run your Docker applications using GitHub Container Registry. This demonstrates how to manage, share, and use Docker images effectively in your projects.
